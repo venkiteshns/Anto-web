@@ -15,7 +15,7 @@ export const SITE_CONFIG = {
     inText: "in",
     atPriceText: "at the price of",
   },
-  heroCta: "EXPLORE RESIDENCES",
+  heroCta: "DOWNLOAD BROCHURE",
   introEyebrow: "SOUKYA ROAD, WHITEFIELD · FROM ABOVE",
   introHeading: {
     beforeItalic: "A Row-Villa ",
@@ -40,7 +40,7 @@ export const SITE_CONFIG = {
 
 export const NAV_LINKS = [
   { label: "RESIDENCES", href: "#typologies" },
-  { label: "ENQUIRE", href: "#amenities" },
+  { label: "ENQUIRE", href: "#enquire" },
   { label: "ABOUT", href: "#locale" },
 ];
 
@@ -48,7 +48,6 @@ export const CONFIGURATION_OPTIONS = [
   "Any Configuration",
   "4 BHK Row Villa",
   "5 BHK Row Villa",
-  "Grand Châteaux 5+ BHK",
 ];
 
 export const PHASE_OPTIONS = [
@@ -89,7 +88,7 @@ export const TYPOLOGIES_DATA: TypologyCardData[] = [
     baths: "4 Baths",
     area: "3,725 sq ft",
     elevator: "G+3 · KONE & MITSUBISHI ELEVATORS",
-    villaImage: "/images/villa-optima.jpg",
+    villaImage: "/images/villas/villa1.webp",
     bedroomImage: "/images/bedroom-1.jpg",
     bedroomDescription:
       "A serene master suite with a walk-in wardrobe and private terrace, paired with three further bedrooms — each with its own en-suite bath and garden-facing arched windows.",
@@ -103,7 +102,7 @@ export const TYPOLOGIES_DATA: TypologyCardData[] = [
     baths: "5 Baths",
     area: "4,061 sq ft",
     elevator: "G+3 · KONE & MITSUBISHI ELEVATORS",
-    villaImage: "/images/villa-premia.jpg",
+    villaImage: "/images/villas/villa2.webp",
     bedroomImage: "/images/bedroom-2.jpg",
     bedroomDescription:
       "A master suite with a private lounge and dressing room, a ground-floor guest bedroom, and three upper bedrooms with en-suite baths framed by tall classical windows.",
@@ -117,13 +116,14 @@ export const TYPOLOGIES_DATA: TypologyCardData[] = [
     baths: "5 Baths",
     area: "4,515 sq ft",
     elevator: "G+3 · KONE & MITSUBISHI ELEVATORS",
-    villaImage: "/images/villa-luxe.jpg",
+    villaImage: "/images/villas/villa3.webp",
     bedroomImage: "/images/bedroom-3.jpg",
     bedroomDescription:
       "A double-height master salon with a fireplace and rooftop access, a dedicated study-bedroom, and three en-suite bedrooms with calm garden views.",
   },
   {
     id: "card-4",
+    price: "₹7.80 Cr*",
     title: "5 Bed Luxe",
     phase: "PHASE 1",
     beds: "5 Beds",
@@ -134,19 +134,6 @@ export const TYPOLOGIES_DATA: TypologyCardData[] = [
     bedroomImage: "/images/bedroom-2.jpg",
     bedroomDescription:
       "Five luxury bedrooms — a double-height master suite with a canopy bed and private terrace, a ground-floor senior suite, and three en-suite family bedrooms with panoramic rooftop views.",
-  },
-  {
-    id: "card-5",
-    title: "4 Bed Optima",
-    phase: "PHASE 2",
-    beds: "4 Beds",
-    baths: "4 Baths",
-    area: "3,725 sq ft",
-    elevator: "G+3 · KONE & MITSUBISHI ELEVATORS",
-    villaImage: "/images/villa-premia.jpg",
-    bedroomImage: "/images/bedroom-1.jpg",
-    bedroomDescription:
-      "A serene master suite with a walk-in wardrobe and private terrace, paired with three further bedrooms — each with its own en-suite bath and garden-facing arched windows.",
   },
 ];
 

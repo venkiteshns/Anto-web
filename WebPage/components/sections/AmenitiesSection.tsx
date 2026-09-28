@@ -2,7 +2,6 @@
 
 import React from "react";
 import { AMENITIES_DATA } from "@/lib/constants";
-import { scrollToElement } from "@/lib/utils";
 
 export default function AmenitiesSection() {
   const renderIcon = (iconName: string) => {
@@ -127,19 +126,6 @@ export default function AmenitiesSection() {
               <p className="mt-6 text-estate-secondary font-sans font-light text-[16px] sm:text-[17px] leading-relaxed max-w-[420px]">
                 {AMENITIES_DATA.description}
               </p>
-            </div>
-
-            <div className="mt-10 lg:mt-16">
-              <button
-                type="button"
-                onClick={() => scrollToElement("locale")}
-                className="inline-flex items-center justify-center border border-estate-primary/70 hover:border-estate-primary text-estate-primary bg-transparent hover:bg-estate-primary hover:text-white rounded-full px-7 py-3 text-[11px] md:text-[12px] uppercase tracking-[0.2em] font-medium transition-all duration-300 active:scale-95 group cursor-pointer"
-              >
-                <span>{AMENITIES_DATA.buttonText}</span>
-                <span className="ml-2.5 transform group-hover:translate-x-1 transition-transform">
-                  →
-                </span>
-              </button>
             </div>
           </div>
 

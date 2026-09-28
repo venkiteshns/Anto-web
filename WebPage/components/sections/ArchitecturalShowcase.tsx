@@ -43,8 +43,8 @@ export default function ArchitecturalShowcase() {
     >
       <div ref={imageRef} className="absolute inset-0 w-full h-full">
         <Image
-          src="/images/cinematic-estate.jpg"
-          alt="Godrej Florenne 20-acre connected French Renaissance row villa estate at twilight dusk"
+          src="/images/footer/f1.webp"
+          alt="Godrej Florenne 20-acre connected French Renaissance row villa estate"
           fill
           sizes="100vw"
           className="object-cover object-center"

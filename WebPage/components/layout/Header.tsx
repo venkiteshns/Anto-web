@@ -19,11 +19,11 @@ export default function Header({ onOpenBookVisit }: HeaderProps) {
 
   return (
     <header className="absolute top-0 left-0 right-0 z-40 w-full">
-      <div className="w-full px-6 md:px-12 lg:px-[46px] pt-6 pb-4 flex items-center justify-between">
+      <div className="relative w-full px-6 md:px-12 lg:px-[46px] pt-6 pb-4 flex items-center justify-between">
         {/* Left: Brand Identity */}
         <div className="flex flex-col items-start select-none cursor-pointer">
           <span className="text-[10px] md:text-[11px] uppercase tracking-[0.28em] text-white/85 font-medium leading-none font-sans">
-            GODREJ PROPERTIES
+            GODREJ VILLAS
           </span>
           <span className="text-[20px] md:text-[24px] tracking-[0.22em] text-white font-light uppercase font-serif leading-tight mt-1">
             FLORENNE
@@ -31,7 +31,7 @@ export default function Header({ onOpenBookVisit }: HeaderProps) {
         </div>
 
         {/* Center: Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-9 lg:space-x-12">
+        <nav className="hidden md:flex items-center space-x-9 lg:space-x-12 md:absolute md:left-1/2 md:-translate-x-1/2">
           {NAV_LINKS.map((link) => (
             <a
               key={link.label}
@@ -44,17 +44,8 @@ export default function Header({ onOpenBookVisit }: HeaderProps) {
           ))}
         </nav>
 
-        {/* Right: Book A Visit CTA */}
-        <div className="flex items-center space-x-4">
-          <button
-            type="button"
-            onClick={onOpenBookVisit}
-            className="bg-white text-[#171B21] px-5 py-2.5 rounded-full text-[11px] font-medium tracking-[0.16em] uppercase hover:bg-[#F9F8F4] hover:shadow-md transition-all duration-300 active:scale-95 leading-none"
-          >
-            BOOK A VISIT
-          </button>
-
-          {/* Mobile hamburger toggle */}
+        {/* Right: Mobile hamburger toggle */}
+        <div className="flex items-center md:hidden">
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

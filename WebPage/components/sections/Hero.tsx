@@ -2,16 +2,16 @@
 
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
-import HeroFilter from "./HeroFilter";
 import { SITE_CONFIG } from "@/lib/constants";
 import { scrollToElement } from "@/lib/utils";
 import gsap from "gsap";
 
 interface HeroProps {
   onOpenBookVisit?: () => void;
+  onOpenBrochure?: () => void;
 }
 
-export default function Hero({ onOpenBookVisit }: HeroProps) {
+export default function Hero({ onOpenBookVisit, onOpenBrochure }: HeroProps) {
   const heroContentRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
@@ -79,21 +79,25 @@ export default function Hero({ onOpenBookVisit }: HeroProps) {
             </span>
           </h1>
 
-          {/* Hero Filter Bar */}
-          <div className="mb-6 md:mb-8">
-            <HeroFilter />
-          </div>
-
-          {/* Hero CTA */}
-          <div>
+          {/* Hero CTAs */}
+          <div className="flex flex-wrap items-center gap-4">
             <button
               type="button"
-              onClick={() => scrollToElement("estate-introduction")}
-              className="inline-flex items-center justify-center border border-white/70 hover:border-white text-white bg-transparent hover:bg-white/10 rounded-full px-7 py-3 text-[11px] md:text-[12px] uppercase tracking-[0.2em] font-medium transition-all duration-300 active:scale-95 group"
+              onClick={onOpenBookVisit}
+              className="inline-flex items-center justify-center bg-white text-[#171B21] px-7 py-3 md:px-8 md:py-3.5 rounded-full text-[11px] md:text-[12px] font-medium tracking-[0.18em] uppercase hover:bg-[#F9F8F4] hover:shadow-lg transition-all duration-300 active:scale-95 leading-none"
             >
-              <span>{SITE_CONFIG.heroCta}</span>
+              Schedule A Visit
+            </button>
+
+            <button
+              type="button"
+              onClick={onOpenBrochure || onOpenBookVisit}
+              className="inline-flex items-center justify-center border border-white/75 hover:border-white text-white bg-black/25 hover:bg-white/15 backdrop-blur-md rounded-full px-7 py-3 md:px-8 md:py-3.5 text-[11px] md:text-[12px] uppercase tracking-[0.2em] font-medium transition-all duration-300 active:scale-95 group leading-none shadow-sm"
+              aria-label="Download Brochure"
+            >
+              <span>Download Brochure</span>
               <svg
-                className="w-3.5 h-3.5 ml-2.5 transform group-hover:translate-y-0.5 transition-transform duration-200"
+                className="w-3.5 h-3.5 ml-2.5 transform group-hover:translate-y-0.5 transition-transform duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -101,8 +105,8 @@ export default function Hero({ onOpenBookVisit }: HeroProps) {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M19 9l-7 7-7-7"
+                  strokeWidth={1.75}
+                  d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12V3m0 9l3.5-3.5M12 12l-3.5-3.5"
                 />
               </svg>
             </button>

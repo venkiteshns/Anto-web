@@ -8,24 +8,34 @@ import TypologiesSection from "@/components/sections/TypologiesSection";
 import LocaleSection from "@/components/sections/LocaleSection";
 import AmenitiesSection from "@/components/sections/AmenitiesSection";
 import ArchitecturalShowcase from "@/components/sections/ArchitecturalShowcase";
+import EnquirySection from "@/components/sections/EnquirySection";
 import Footer from "@/components/sections/Footer";
 import BookVisitModal from "@/components/ui/BookVisitModal";
 import ConfigurationsModal from "@/components/ui/ConfigurationsModal";
 
 export default function EstatePageClient() {
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<"visit" | "brochure">("visit");
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
+
+  const handleOpenModal = (mode: "visit" | "brochure" = "visit") => {
+    setModalMode(mode);
+    setIsBookModalOpen(true);
+  };
 
   return (
     <div className="relative min-h-screen bg-estate-bg selection:bg-estate-primary selection:text-estate-bg">
       {/* Transparent Hero Header */}
-      <Header onOpenBookVisit={() => setIsBookModalOpen(true)} />
+      <Header onOpenBookVisit={() => handleOpenModal("visit")} />
 
       {/* Main Content Sections */}
       <main id="main-content" className="w-full">
         {/* Section 01: Full Viewport Hero Section */}
         <section id="hero" className="w-full">
-          <Hero onOpenBookVisit={() => setIsBookModalOpen(true)} />
+          <Hero
+            onOpenBookVisit={() => handleOpenModal("visit")}
+            onOpenBrochure={() => handleOpenModal("brochure")}
+          />
         </section>
 
         {/* Section 02: Estate Introduction */}
@@ -54,15 +64,19 @@ export default function EstatePageClient() {
         <section id="architecture" className="w-full">
           <ArchitecturalShowcase />
         </section>
+
+        {/* Section 07: Private Enquiries & Lead Capture */}
+        <EnquirySection onOpenBookVisit={() => handleOpenModal("visit")} />
       </main>
 
       {/* Section 07: Florenne Dispatch & Footer */}
-      <Footer onOpenBookVisit={() => setIsBookModalOpen(true)} />
+      <Footer onOpenBookVisit={() => handleOpenModal("visit")} />
 
       {/* Interactive Modals */}
       <BookVisitModal
         isOpen={isBookModalOpen}
         onClose={() => setIsBookModalOpen(false)}
+        mode={modalMode}
       />
 
       <ConfigurationsModal
