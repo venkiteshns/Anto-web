@@ -1,0 +1,204 @@
+/* -----------------------------------------------------------------------
+   Design tokens
+   Palette drawn from limestone facades, weathered copper roofing and
+   bottle-green shutters — the material language of the French
+   Renaissance / château architecture Florenne is built on.
+   ----------------------------------------------------------------------- */
+:root {
+  --stone: #f3efe4; /* limestone facade */
+  --stone-deep: #e9e2d2; /* alt section background */
+  --ink: #221f1a; /* near-black, warmed */
+  --ink-soft: #4a463d;
+  --chateau: #1e3a32; /* bottle-green shutters */
+  --chateau-deep: #142720;
+  --brass: #a1782f; /* aged brass / gold */
+  --brass-light: #cba85c;
+  --copper: #935a3c; /* weathered roof copper */
+  --line: rgba(34, 31, 26, 0.14);
+  --line-on-dark: rgba(243, 239, 228, 0.22);
+
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --max: 1200px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--stone);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  margin: 0;
+  color: var(--chateau-deep);
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 64px);
+}
+
+section {
+  position: relative;
+}
+
+.hairline {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 0;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--brass);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 14px 28px;
+  border-radius: 2px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--brass);
+  color: var(--stone);
+}
+.btn-primary:hover {
+  background: var(--brass-light);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--line-on-dark);
+  color: inherit;
+}
+.btn-outline:hover {
+  border-color: var(--brass);
+  color: var(--brass);
+}
+
+.btn-outline-dark {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--chateau-deep);
+}
+.btn-outline-dark:hover {
+  border-color: var(--chateau);
+  background: var(--chateau);
+  color: var(--stone);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Responsive layout helpers
+   Sections that use a fixed two-column split need to collapse to a single
+   column on narrow viewports; inline styles can't carry media queries.
+   ----------------------------------------------------------------------- */
+.hero-grid,
+.overview-grid,
+.enquire-grid {
+  display: grid;
+  gap: 48px;
+}
+.hero-grid {
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+}
+.overview-grid {
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 56px;
+}
+.enquire-grid {
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .hero-grid,
+  .overview-grid,
+  .enquire-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-motif {
+    order: -1;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+}
+
+.nav-links {
+  align-items: center;
+}
+@media (max-width: 640px) {
+  .nav-links {
+    gap: 14px !important;
+    font-size: 0.85rem !important;
+  }
+  .nav-links a:not(.btn) {
+    display: none;
+  }
+}
+
+/* Focus visibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+}
