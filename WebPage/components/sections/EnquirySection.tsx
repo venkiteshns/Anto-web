@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import SuccessModal from "../ui/SuccessModal";
 
 interface EnquirySectionProps {
   onOpenBookVisit?: () => void;
@@ -13,42 +14,40 @@ export default function EnquirySection({ onOpenBookVisit }: EnquirySectionProps)
   const [typology, setTypology] = useState("4 BHK Row Villa");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [submittedData, setSubmittedData] = useState({ name: "", typology: "" });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    const guestName = name;
+    const guestTypology = typology;
+
     try {
       await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           formType: "Exclusive Details Enquiry",
-          name,
+          name: guestName,
           phone,
           email,
-          typology,
+          typology: guestTypology,
           message,
         }),
       });
-      setSubmitted(true);
-      handleReset();
     } catch (err) {
       console.error("Failed to submit enquiry:", err);
-      setSubmitted(true);
-      handleReset();
     } finally {
       setIsSubmitting(false);
+      setSubmittedData({ name: guestName, typology: guestTypology });
+      setName("");
+      setPhone("");
+      setEmail("");
+      setMessage("");
+      setTypology("4 BHK Row Villa");
+      setIsSuccessModalOpen(true);
     }
-  };
-
-  const handleReset = () => {
-    setName("");
-    setPhone("");
-    setEmail("");
-    setTypology("4 BHK Row Villa");
-    setMessage("");
-    setSubmitted(false);
   };
 
   return (
@@ -125,14 +124,6 @@ export default function EnquirySection({ onOpenBookVisit }: EnquirySectionProps)
                       />
                     </svg>
                   </div>
-                  <div>
-                    <span className="text-[10.5px] uppercase tracking-[0.2em] font-medium text-[#73716C] block font-sans">
-                      Concierge Desk
-                    </span>
-                    <p className="text-[13.5px] text-[#171B21] font-sans font-light mt-0.5">
-                      +91 80 4672 5000 &bull; +91 98765 43210
-                    </p>
-                  </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
@@ -186,67 +177,14 @@ export default function EnquirySection({ onOpenBookVisit }: EnquirySectionProps)
               {/* Subtle Luxury Top Accent Bar */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#A99362] via-[#C8C3B8] to-[#A99362]" />
 
-              {submitted ? (
-                <div className="py-12 px-4 text-center">
-                  <div className="w-14 h-14 mx-auto rounded-full bg-[#A99362]/15 text-[#A99362] flex items-center justify-center mb-5">
-                    <svg
-                      className="w-7 h-7"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                  <span className="text-[11px] uppercase tracking-[0.24em] font-medium text-[#A99362] block mb-2 font-sans">
-                    ENQUIRY RECEIVED
+              <div>
+                <div className="mb-8">
+                  <span className="text-[10.5px] uppercase tracking-[0.24em] font-medium text-[#A99362] block mb-1 font-sans">
+                    CONFIDENTIAL ASSISTANCE
                   </span>
-                  <h3 className="font-serif text-2xl sm:text-3xl text-[#171B21] font-light">
-                    Thank You, {name || "Esteemed Guest"}
+                  <h3 className="font-serif text-2xl sm:text-3xl font-light text-[#171B21]">
+                    Request Exclusive Details
                   </h3>
-                  <p className="mt-3 text-[14px] text-[#73716C] font-sans font-light max-w-md mx-auto leading-relaxed">
-                    Our Senior Concierge at Godrej Florenne has received your
-                    interest for the{" "}
-                    <strong className="font-medium text-[#171B21]">
-                      {typology}
-                    </strong>
-                    . We will connect with you shortly with confidential pricing
-                    and priority allotment details.
-                  </p>
-
-                  <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <button
-                      type="button"
-                      onClick={handleReset}
-                      className="w-full sm:w-auto px-6 py-3 rounded-full border border-[#E6E3DC] text-[11.5px] uppercase tracking-[0.16em] font-medium text-[#171B21] hover:bg-[#FAF8F5] transition-colors"
-                    >
-                      Submit Another Enquiry
-                    </button>
-                    {onOpenBookVisit && (
-                      <button
-                        type="button"
-                        onClick={onOpenBookVisit}
-                        className="w-full sm:w-auto px-7 py-3 rounded-full bg-[#171B21] text-white text-[11.5px] uppercase tracking-[0.16em] font-medium hover:bg-[#A99362] transition-colors"
-                      >
-                        Schedule A Site Visit
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <div className="mb-8">
-                    <span className="text-[10.5px] uppercase tracking-[0.24em] font-medium text-[#A99362] block mb-1 font-sans">
-                      CONFIDENTIAL ASSISTANCE
-                    </span>
-                    <h3 className="font-serif text-2xl sm:text-3xl font-light text-[#171B21]">
-                      Request Exclusive Details
-                    </h3>
                     <p className="text-xs sm:text-[13px] text-[#73716C] font-sans font-light mt-1.5">
                       Please provide your contact information to receive our
                       curated villa portfolio.
@@ -317,11 +255,10 @@ export default function EnquirySection({ onOpenBookVisit }: EnquirySectionProps)
                               key={option}
                               type="button"
                               onClick={() => setTypology(option)}
-                              className={`py-2.5 px-3 rounded-lg text-xs font-sans transition-all text-center border ${
-                                isSelected
+                              className={`py-2.5 px-3 rounded-lg text-xs font-sans transition-all text-center border ${isSelected
                                   ? "bg-[#171B21] text-white border-[#171B21] shadow-sm font-medium"
                                   : "bg-[#FAF8F5] text-[#73716C] border-[#E6E3DC] hover:border-[#C8C3B8]"
-                              }`}
+                                }`}
                             >
                               {option}
                             </button>
@@ -389,11 +326,18 @@ export default function EnquirySection({ onOpenBookVisit }: EnquirySectionProps)
                     </button>
                   </form>
                 </div>
-              )}
             </div>
           </div>
         </div>
       </div>
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        guestName={submittedData.name}
+        typology={submittedData.typology}
+        onOpenBookVisit={onOpenBookVisit}
+      />
     </section>
   );
 }
