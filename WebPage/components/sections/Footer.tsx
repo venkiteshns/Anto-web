@@ -168,12 +168,12 @@ export default function Footer({ onOpenBookVisit }: FooterProps) {
                 </p>
                 <p>
                   <a
-                    href="https://wa.me/918867858125"
+                    href="https://wa.me/918867855125"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-white transition-colors"
                   >
-                    WhatsApp +91 88678 58125
+                    WhatsApp +91 88678 55125
                   </a>
                 </p>
                 <p>
