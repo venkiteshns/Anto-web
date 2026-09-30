@@ -21,10 +21,29 @@ export async function POST(request: Request) {
       formType = "General Enquiry",
     } = body;
 
-    // Basic validation
-    if (!name || !phone) {
+    // Validation: name, phone, and email are mandatory
+    const trimmedName = String(name || "").trim();
+    if (!trimmedName || trimmedName.length < 2) {
       return NextResponse.json(
-        { error: "Name and Phone Number are required." },
+        { error: "Please provide your full name (minimum 2 characters)." },
+        { status: 400 }
+      );
+    }
+
+    const trimmedPhone = String(phone || "").trim();
+    const phoneDigits = trimmedPhone.replace(/\D/g, "");
+    if (!trimmedPhone || phoneDigits.length < 7) {
+      return NextResponse.json(
+        { error: "Please provide a valid phone number." },
+        { status: 400 }
+      );
+    }
+
+    const trimmedEmail = String(email || "").trim();
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+    if (!trimmedEmail || !emailRegex.test(trimmedEmail)) {
+      return NextResponse.json(
+        { error: "Please provide a valid email address." },
         { status: 400 }
       );
     }
@@ -36,9 +55,9 @@ export async function POST(request: Request) {
 
     const leadData: LeadData = {
       formType,
-      name: String(name).trim(),
-      phone: String(phone).trim(),
-      email: email ? String(email).trim() : undefined,
+      name: trimmedName,
+      phone: trimmedPhone,
+      email: trimmedEmail,
       date: date ? String(date).trim() : undefined,
       config: config ? String(config).trim() : undefined,
       typology: typology ? String(typology).trim() : undefined,

@@ -1,7 +1,13 @@
-"use client";
-
 import React, { useState } from "react";
 import SuccessModal from "../ui/SuccessModal";
+import PhoneInput from "../ui/PhoneInput";
+import {
+  Country,
+  DEFAULT_COUNTRY,
+  validatePhoneNumber,
+  validateEmail,
+  validateName,
+} from "@/lib/countries";
 
 interface EnquirySectionProps {
   onOpenBookVisit?: () => void;
@@ -10,6 +16,7 @@ interface EnquirySectionProps {
 export default function EnquirySection({ onOpenBookVisit }: EnquirySectionProps) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [country, setCountry] = useState<Country>(DEFAULT_COUNTRY);
   const [email, setEmail] = useState("");
   const [typology, setTypology] = useState("4 BHK Row Villa");
   const [message, setMessage] = useState("");
@@ -17,11 +24,77 @@ export default function EnquirySection({ onOpenBookVisit }: EnquirySectionProps)
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [submittedData, setSubmittedData] = useState({ name: "", typology: "" });
 
+  // Field validation and touch state
+  const [touched, setTouched] = useState({
+    name: false,
+    phone: false,
+    email: false,
+  });
+  const [errors, setErrors] = useState<{
+    name?: string;
+    phone?: string;
+    email?: string;
+  }>({});
+
+  const validateAll = () => {
+    const nameResult = validateName(name);
+    const phoneResult = validatePhoneNumber(phone, country);
+    const emailResult = validateEmail(email);
+
+    const newErrors: { name?: string; phone?: string; email?: string } = {};
+    if (!nameResult.isValid) newErrors.name = nameResult.error;
+    if (!phoneResult.isValid) newErrors.phone = phoneResult.error;
+    if (!emailResult.isValid) newErrors.email = emailResult.error;
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNameChange = (val: string) => {
+    setName(val);
+    if (touched.name) {
+      const res = validateName(val);
+      setErrors((prev) => ({ ...prev, name: res.error }));
+    }
+  };
+
+  const handleEmailChange = (val: string) => {
+    setEmail(val);
+    if (touched.email) {
+      const res = validateEmail(val);
+      setErrors((prev) => ({ ...prev, email: res.error }));
+    }
+  };
+
+  const handlePhoneChange = (
+    nationalNumber: string,
+    newCountry: Country,
+    fullPhone: string,
+    isValid: boolean
+  ) => {
+    setPhone(nationalNumber);
+    setCountry(newCountry);
+    if (touched.phone) {
+      const res = validatePhoneNumber(nationalNumber, newCountry);
+      setErrors((prev) => ({ ...prev, phone: res.error }));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Mark all required fields as touched
+    setTouched({ name: true, phone: true, email: true });
+
+    const isValid = validateAll();
+    if (!isValid) {
+      return;
+    }
+
     setIsSubmitting(true);
-    const guestName = name;
+    const guestName = name.trim();
     const guestTypology = typology;
+    const fullPhoneNumber = `${country.dialCode} ${phone.trim()}`;
 
     try {
       await fetch("/api/leads", {
@@ -30,10 +103,10 @@ export default function EnquirySection({ onOpenBookVisit }: EnquirySectionProps)
         body: JSON.stringify({
           formType: "Exclusive Details Enquiry",
           name: guestName,
-          phone,
-          email,
+          phone: fullPhoneNumber,
+          email: email.trim(),
           typology: guestTypology,
-          message,
+          message: message.trim(),
         }),
       });
     } catch (err) {
@@ -43,9 +116,12 @@ export default function EnquirySection({ onOpenBookVisit }: EnquirySectionProps)
       setSubmittedData({ name: guestName, typology: guestTypology });
       setName("");
       setPhone("");
+      setCountry(DEFAULT_COUNTRY);
       setEmail("");
       setMessage("");
       setTypology("4 BHK Row Villa");
+      setTouched({ name: false, phone: false, email: false });
+      setErrors({});
       setIsSuccessModalOpen(true);
     }
   };
@@ -120,24 +196,6 @@ export default function EnquirySection({ onOpenBookVisit }: EnquirySectionProps)
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={1.5}
-                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-9 h-9 rounded-full bg-[#A99362]/10 flex items-center justify-center shrink-0 mt-0.5 text-[#A99362]">
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
@@ -185,147 +243,198 @@ export default function EnquirySection({ onOpenBookVisit }: EnquirySectionProps)
                   <h3 className="font-serif text-2xl sm:text-3xl font-light text-[#171B21]">
                     Request Exclusive Details
                   </h3>
-                    <p className="text-xs sm:text-[13px] text-[#73716C] font-sans font-light mt-1.5">
-                      Please provide your contact information to receive our
-                      curated villa portfolio.
-                    </p>
+                  <p className="text-xs sm:text-[13px] text-[#73716C] font-sans font-light mt-1.5">
+                    Please provide your contact information to receive our
+                    curated villa portfolio.
+                  </p>
+                </div>
+
+                <form onSubmit={handleSubmit} noValidate className="space-y-5">
+                  {/* Full Name */}
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1.5 font-medium">
+                      Full Name <span className="text-[#A99362]">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={name}
+                      onChange={(e) => handleNameChange(e.target.value)}
+                      onBlur={() => {
+                        setTouched((prev) => ({ ...prev, name: true }));
+                        const res = validateName(name);
+                        setErrors((prev) => ({ ...prev, name: res.error }));
+                      }}
+                      placeholder="e.g. Vikramaditya Singhania"
+                      aria-invalid={Boolean(touched.name && errors.name)}
+                      className={`w-full h-[46px] bg-[#FAF8F5] border rounded-lg px-4 text-sm text-[#171B21] placeholder:text-[#73716C]/50 focus:outline-none focus:bg-white transition-all font-sans ${
+                        touched.name && errors.name
+                          ? "border-red-400 bg-red-50/10 focus:border-red-500 focus:ring-1 focus:ring-red-400/40"
+                          : "border-[#E6E3DC] focus:border-[#A99362]"
+                      }`}
+                    />
+                    {touched.name && errors.name && (
+                      <p className="mt-1.5 text-xs text-red-500 font-sans flex items-center space-x-1 animate-fadeIn">
+                        <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path
+                            fillRule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span>{errors.name}</span>
+                      </p>
+                    )}
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    {/* Full Name */}
+                  {/* Phone & Email Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1.5 font-medium">
-                        Full Name <span className="text-[#A99362]">*</span>
+                        Phone Number <span className="text-[#A99362]">*</span>
+                      </label>
+                      <PhoneInput
+                        id="enquiry-phone"
+                        value={phone}
+                        selectedCountry={country}
+                        onChange={handlePhoneChange}
+                        onBlur={() => {
+                          setTouched((prev) => ({ ...prev, phone: true }));
+                          const res = validatePhoneNumber(phone, country);
+                          setErrors((prev) => ({ ...prev, phone: res.error }));
+                        }}
+                        error={errors.phone}
+                        isTouched={touched.phone}
+                        containerClassName="h-[46px]"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1.5 font-medium">
+                        Email Address <span className="text-[#A99362]">*</span>
                       </label>
                       <input
-                        type="text"
+                        type="email"
                         required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="e.g. Vikramaditya Singhania"
-                        className="w-full bg-[#FAF8F5] border border-[#E6E3DC] rounded-lg px-4 py-3 text-sm text-[#171B21] placeholder:text-[#73716C]/50 focus:outline-none focus:border-[#A99362] focus:bg-white transition-all font-sans"
+                        value={email}
+                        onChange={(e) => handleEmailChange(e.target.value)}
+                        onBlur={() => {
+                          setTouched((prev) => ({ ...prev, email: true }));
+                          const res = validateEmail(email);
+                          setErrors((prev) => ({ ...prev, email: res.error }));
+                        }}
+                        placeholder="vikram@domain.com"
+                        aria-invalid={Boolean(touched.email && errors.email)}
+                        className={`w-full h-[46px] bg-[#FAF8F5] border rounded-lg px-4 text-sm text-[#171B21] placeholder:text-[#73716C]/50 focus:outline-none focus:bg-white transition-all font-sans ${
+                          touched.email && errors.email
+                            ? "border-red-400 bg-red-50/10 focus:border-red-500 focus:ring-1 focus:ring-red-400/40"
+                            : "border-[#E6E3DC] focus:border-[#A99362]"
+                        }`}
                       />
-                    </div>
-
-                    {/* Phone & Email Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1.5 font-medium">
-                          Phone Number <span className="text-[#A99362]">*</span>
-                        </label>
-                        <input
-                          type="tel"
-                          required
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          placeholder="+91 98765 43210"
-                          className="w-full bg-[#FAF8F5] border border-[#E6E3DC] rounded-lg px-4 py-3 text-sm text-[#171B21] placeholder:text-[#73716C]/50 focus:outline-none focus:border-[#A99362] focus:bg-white transition-all font-sans"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1.5 font-medium">
-                          Email Address <span className="text-[#A99362]">*</span>
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="vikram@domain.com"
-                          className="w-full bg-[#FAF8F5] border border-[#E6E3DC] rounded-lg px-4 py-3 text-sm text-[#171B21] placeholder:text-[#73716C]/50 focus:outline-none focus:border-[#A99362] focus:bg-white transition-all font-sans"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Configuration Preference */}
-                    <div>
-                      <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-2 font-medium">
-                        Interested Typology
-                      </label>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                        {[
-                          "4 BHK Row Villa",
-                          "5 BHK Row Villa",
-                          "Both Typologies",
-                        ].map((option) => {
-                          const isSelected = typology === option;
-                          return (
-                            <button
-                              key={option}
-                              type="button"
-                              onClick={() => setTypology(option)}
-                              className={`py-2.5 px-3 rounded-lg text-xs font-sans transition-all text-center border ${isSelected
-                                  ? "bg-[#171B21] text-white border-[#171B21] shadow-sm font-medium"
-                                  : "bg-[#FAF8F5] text-[#73716C] border-[#E6E3DC] hover:border-[#C8C3B8]"
-                                }`}
-                            >
-                              {option}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Optional Message */}
-                    <div>
-                      <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1.5 font-medium">
-                        Message / Specific Queries{" "}
-                        <span className="text-[#73716C]/50 font-normal">
-                          (Optional)
-                        </span>
-                      </label>
-                      <textarea
-                        rows={3}
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Inquire about pricing, construction status, or private site preview timings..."
-                        className="w-full bg-[#FAF8F5] border border-[#E6E3DC] rounded-lg px-4 py-2.5 text-sm text-[#171B21] placeholder:text-[#73716C]/50 focus:outline-none focus:border-[#A99362] focus:bg-white transition-all font-sans resize-none"
-                      />
-                    </div>
-
-                    {/* Consent Note */}
-                    <p className="text-[11px] text-[#73716C]/75 font-sans leading-normal">
-                      By submitting this enquiry, you authorize Godrej
-                      Properties representatives to contact you via Call, SMS,
-                      or WhatsApp.
-                    </p>
-
-                    {/* Submit Button */}
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-[#171B21] text-white py-3.5 sm:py-4 rounded-xl text-xs uppercase tracking-[0.2em] font-medium hover:bg-[#A99362] transition-colors duration-300 shadow-md hover:shadow-lg disabled:opacity-70 flex items-center justify-center space-x-2 cursor-pointer"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <svg
-                            className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            />
+                      {touched.email && errors.email && (
+                        <p className="mt-1.5 text-xs text-red-500 font-sans flex items-center space-x-1 animate-fadeIn">
+                          <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              fillRule="evenodd"
+                              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                              clipRule="evenodd"
                             />
                           </svg>
-                          <span>Transmitting Enquiry...</span>
-                        </>
-                      ) : (
-                        <span>Submit Private Enquiry</span>
+                          <span>{errors.email}</span>
+                        </p>
                       )}
-                    </button>
-                  </form>
-                </div>
+                    </div>
+                  </div>
+
+                  {/* Configuration Preference */}
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-2 font-medium">
+                      Interested Typology
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                      {[
+                        "4 BHK Row Villa",
+                        "5 BHK Row Villa",
+                        "Both Typologies",
+                      ].map((option) => {
+                        const isSelected = typology === option;
+                        return (
+                          <button
+                            key={option}
+                            type="button"
+                            onClick={() => setTypology(option)}
+                            className={`py-2.5 px-3 rounded-lg text-xs font-sans transition-all text-center border ${isSelected
+                              ? "bg-[#171B21] text-white border-[#171B21] shadow-sm font-medium"
+                              : "bg-[#FAF8F5] text-[#73716C] border-[#E6E3DC] hover:border-[#C8C3B8]"
+                              }`}
+                          >
+                            {option}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Optional Message */}
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1.5 font-medium">
+                      Message / Specific Queries{" "}
+                      <span className="text-[#73716C]/50 font-normal">
+                        (Optional)
+                      </span>
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="Inquire about pricing, construction status, or private site preview timings..."
+                      className="w-full bg-[#FAF8F5] border border-[#E6E3DC] rounded-lg px-4 py-2.5 text-sm text-[#171B21] placeholder:text-[#73716C]/50 focus:outline-none focus:border-[#A99362] focus:bg-white transition-all font-sans resize-none"
+                    />
+                  </div>
+
+                  {/* Consent Note */}
+                  <p className="text-[11px] text-[#73716C]/75 font-sans leading-normal">
+                    By submitting this enquiry, you authorize Godrej
+                    Properties representatives to contact you via Call, SMS,
+                    or WhatsApp.
+                  </p>
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-[#171B21] text-white py-3.5 sm:py-4 rounded-xl text-xs uppercase tracking-[0.2em] font-medium hover:bg-[#A99362] transition-colors duration-300 shadow-md hover:shadow-lg disabled:opacity-70 flex items-center justify-center space-x-2 cursor-pointer"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <svg
+                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          />
+                        </svg>
+                        <span>Transmitting Enquiry...</span>
+                      </>
+                    ) : (
+                      <span>Submit Private Enquiry</span>
+                    )}
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>

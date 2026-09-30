@@ -2,6 +2,14 @@
 
 import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { CONFIGURATION_OPTIONS } from "@/lib/constants";
+import PhoneInput from "./PhoneInput";
+import {
+  Country,
+  DEFAULT_COUNTRY,
+  validatePhoneNumber,
+  validateEmail,
+  validateName,
+} from "@/lib/countries";
 
 interface BookVisitModalProps {
   isOpen: boolean;
@@ -46,6 +54,7 @@ export default function BookVisitModal({
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [country, setCountry] = useState<Country>(DEFAULT_COUNTRY);
   const [email, setEmail] = useState("");
   const [date, setDate] = useState("");
   const [config, setConfig] = useState(configOptions[0] || "4 BHK Row Villa");
@@ -54,6 +63,62 @@ export default function BookVisitModal({
   const [openUpwards, setOpenUpwards] = useState(true);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Field validation and touch state
+  const [touched, setTouched] = useState({
+    name: false,
+    phone: false,
+    email: false,
+  });
+  const [errors, setErrors] = useState<{
+    name?: string;
+    phone?: string;
+    email?: string;
+  }>({});
+
+  const validateAll = () => {
+    const nameResult = validateName(name);
+    const phoneResult = validatePhoneNumber(phone, country);
+    const emailResult = validateEmail(email);
+
+    const newErrors: { name?: string; phone?: string; email?: string } = {};
+    if (!nameResult.isValid) newErrors.name = nameResult.error;
+    if (!phoneResult.isValid) newErrors.phone = phoneResult.error;
+    if (!emailResult.isValid) newErrors.email = emailResult.error;
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNameChange = (val: string) => {
+    setName(val);
+    if (touched.name) {
+      const res = validateName(val);
+      setErrors((prev) => ({ ...prev, name: res.error }));
+    }
+  };
+
+  const handleEmailChange = (val: string) => {
+    setEmail(val);
+    if (touched.email) {
+      const res = validateEmail(val);
+      setErrors((prev) => ({ ...prev, email: res.error }));
+    }
+  };
+
+  const handlePhoneChange = (
+    nationalNumber: string,
+    newCountry: Country,
+    fullPhone: string,
+    isValid: boolean
+  ) => {
+    setPhone(nationalNumber);
+    setCountry(newCountry);
+    if (touched.phone) {
+      const res = validatePhoneNumber(nationalNumber, newCountry);
+      setErrors((prev) => ({ ...prev, phone: res.error }));
+    }
+  };
 
   // macOS Genie animation lifecycle states
   const [shouldRender, setShouldRender] = useState(isOpen);
@@ -74,11 +139,14 @@ export default function BookVisitModal({
   const resetForm = useCallback(() => {
     setName("");
     setPhone("");
+    setCountry(DEFAULT_COUNTRY);
     setEmail("");
     setDate("");
     setConfig(configOptions[0] || "4 BHK Row Villa");
     setIsDropdownOpen(false);
     setIsDatePickerOpen(false);
+    setTouched({ name: false, phone: false, email: false });
+    setErrors({});
   }, [configOptions]);
 
   // Sync open/close animation lifecycle
@@ -255,20 +323,26 @@ export default function BookVisitModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setTouched({ name: true, phone: true, email: true });
+
+    const isValid = validateAll();
+    if (!isValid) return;
+
     if (!isBrochure && !date) {
       toggleDatePicker();
       return;
     }
     setIsSubmitting(true);
+    const fullPhoneNumber = `${country.dialCode} ${phone.trim()}`;
     try {
       await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           formType: isBrochure ? "Download Brochure" : "Book A Visit",
-          name,
-          phone,
-          email,
+          name: name.trim(),
+          phone: fullPhoneNumber,
+          email: email.trim(),
           date: isBrochure ? undefined : date,
           config,
         }),
@@ -373,19 +447,41 @@ export default function BookVisitModal({
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} noValidate className="space-y-4">
               <div>
-                <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1">
-                  Full Name
+                <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1 font-medium">
+                  Full Name <span className="text-[#A99362]">*</span>
                 </label>
                 <input
                   type="text"
                   required
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => handleNameChange(e.target.value)}
+                  onBlur={() => {
+                    setTouched((prev) => ({ ...prev, name: true }));
+                    const res = validateName(name);
+                    setErrors((prev) => ({ ...prev, name: res.error }));
+                  }}
                   placeholder="Lord / Lady / Mr. / Ms."
-                  className="w-full bg-white border border-[#E6E3DC] rounded-lg px-4 py-2.5 text-sm text-[#171B21] focus:outline-none focus:border-[#A99362] transition-colors"
+                  aria-invalid={Boolean(touched.name && errors.name)}
+                  className={`w-full h-[42px] bg-white border rounded-lg px-4 text-sm text-[#171B21] focus:outline-none transition-colors ${
+                    touched.name && errors.name
+                      ? "border-red-400 bg-red-50/10 focus:border-red-500 focus:ring-1 focus:ring-red-400/40"
+                      : "border-[#E6E3DC] focus:border-[#A99362]"
+                  }`}
                 />
+                {touched.name && errors.name && (
+                  <p className="mt-1 text-xs text-red-500 font-sans flex items-center space-x-1 animate-fadeIn">
+                    <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>{errors.name}</span>
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -393,13 +489,22 @@ export default function BookVisitModal({
                   <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1 font-medium">
                     Phone Number <span className="text-[#A99362]">*</span>
                   </label>
-                  <input
-                    type="tel"
-                    required
+                  <PhoneInput
+                    id="modal-phone"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+91 98765 43210"
-                    className="w-full bg-white border border-[#E6E3DC] rounded-lg px-4 py-2.5 text-sm text-[#171B21] focus:outline-none focus:border-[#A99362] transition-colors font-sans"
+                    selectedCountry={country}
+                    onChange={handlePhoneChange}
+                    onBlur={() => {
+                      setTouched((prev) => ({ ...prev, phone: true }));
+                      const res = validatePhoneNumber(phone, country);
+                      setErrors((prev) => ({ ...prev, phone: res.error }));
+                    }}
+                    error={errors.phone}
+                    isTouched={touched.phone}
+                    containerClassName="h-[42px]"
+                    buttonClassName="bg-white"
+                    inputClassName="bg-white"
+                    required
                   />
                 </div>
 
@@ -411,10 +516,32 @@ export default function BookVisitModal({
                     type="email"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => handleEmailChange(e.target.value)}
+                    onBlur={() => {
+                      setTouched((prev) => ({ ...prev, email: true }));
+                      const res = validateEmail(email);
+                      setErrors((prev) => ({ ...prev, email: res.error }));
+                    }}
                     placeholder="vikram@domain.com"
-                    className="w-full bg-white border border-[#E6E3DC] rounded-lg px-4 py-2.5 text-sm text-[#171B21] focus:outline-none focus:border-[#A99362] transition-colors font-sans"
+                    aria-invalid={Boolean(touched.email && errors.email)}
+                    className={`w-full h-[42px] bg-white border rounded-lg px-4 text-sm text-[#171B21] focus:outline-none transition-colors font-sans ${
+                      touched.email && errors.email
+                        ? "border-red-400 bg-red-50/10 focus:border-red-500 focus:ring-1 focus:ring-red-400/40"
+                        : "border-[#E6E3DC] focus:border-[#A99362]"
+                    }`}
                   />
+                  {touched.email && errors.email && (
+                    <p className="mt-1 text-xs text-red-500 font-sans flex items-center space-x-1 animate-fadeIn">
+                      <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <span>{errors.email}</span>
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -429,7 +556,7 @@ export default function BookVisitModal({
                     onClick={toggleDatePicker}
                     aria-haspopup="dialog"
                     aria-expanded={isDatePickerOpen}
-                    className={`w-full bg-white border rounded-lg px-3 py-2.5 text-xs font-sans flex items-center justify-between text-left transition-all duration-200 focus:outline-none cursor-pointer ${
+                    className={`w-full h-[42px] bg-white border rounded-lg px-3 text-xs font-sans flex items-center justify-between text-left transition-all duration-200 focus:outline-none cursor-pointer ${
                       isDatePickerOpen
                         ? "border-[#A99362] ring-1 ring-[#A99362]/30 shadow-sm"
                         : "border-[#E6E3DC] hover:border-[#C8C3B8]"
@@ -604,7 +731,7 @@ export default function BookVisitModal({
                     }}
                     aria-haspopup="listbox"
                     aria-expanded={isDropdownOpen}
-                    className={`w-full bg-white border rounded-lg px-3 py-2.5 text-xs text-[#171B21] font-sans flex items-center justify-between text-left transition-all duration-200 focus:outline-none ${
+                    className={`w-full h-[42px] bg-white border rounded-lg px-3 text-xs text-[#171B21] font-sans flex items-center justify-between text-left transition-all duration-200 focus:outline-none ${
                       isDropdownOpen
                         ? "border-[#A99362] ring-1 ring-[#A99362]/30 shadow-sm"
                         : "border-[#E6E3DC] hover:border-[#C8C3B8]"
