@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
-import {
-  forwardToGoogleSheets,
-  sendEmailAlert,
-  LeadData,
-} from "@/lib/notifications";
+import { forwardToGoogleSheets, LeadData } from "@/lib/notifications";
 
 export async function POST(request: Request) {
   try {
@@ -58,7 +54,7 @@ export async function POST(request: Request) {
       name: trimmedName,
       phone: trimmedPhone,
       email: trimmedEmail,
-      date: date ? String(date).trim() : undefined,
+      date: date ? String(date).trim() : (formType === "Download Brochure" ? "Brochure Request" : undefined),
       config: config ? String(config).trim() : undefined,
       typology: typology ? String(typology).trim() : undefined,
       message: message ? String(message).trim() : undefined,
@@ -93,16 +89,16 @@ export async function POST(request: Request) {
           "[MongoDB IP Access Notice] Atlas dropped connection (SSL alert 80). Your current IP is not in MongoDB Atlas Network Access whitelist. Please add your IP or 0.0.0.0/0 in Atlas Security -> Network Access."
         );
       }
-      // We log but continue with background forwarding so lead isn't lost if DB has IP restrictions
+      // We log but continue with sheet forwarding so lead isn't lost if DB has IP restrictions
     }
 
-    // 2. Background Dispatch: Send to Google Sheets and Email (Non-blocking)
-    Promise.allSettled([
-      forwardToGoogleSheets(leadData),
-      sendEmailAlert(leadData),
-    ]).then((results) => {
-      console.log("[Background Dispatch] Finished dispatch tasks:", results);
-    });
+    // 2. Dispatch: Forward lead to Google Sheets (Awaited for Vercel Serverless compatibility)
+    try {
+      await forwardToGoogleSheets(leadData);
+    } catch (sheetError: unknown) {
+      const msg = sheetError instanceof Error ? sheetError.message : String(sheetError);
+      console.error("[Google Sheets Dispatch Error]:", msg);
+    }
 
     return NextResponse.json(
       {
