@@ -5,6 +5,7 @@ import Header from "./Header";
 import Hero from "@/components/sections/Hero";
 import Introduction from "@/components/sections/Introduction";
 import TypologiesSection from "@/components/sections/TypologiesSection";
+import FloorPlanGrid from "@/components/sections/FloorPlanGrid";
 import LocaleSection from "@/components/sections/LocaleSection";
 import AmenitiesSection from "@/components/sections/AmenitiesSection";
 import ArchitecturalShowcase from "@/components/sections/ArchitecturalShowcase";
@@ -48,6 +49,11 @@ export default function EstatePageClient() {
           <TypologiesSection
             onOpenConfigurationsModal={() => setIsConfigModalOpen(true)}
           />
+        </section>
+
+        {/* Section: Floor Plan Grid Showcase (1 on top, 2 on bottom) */}
+        <section id="floor-plans" className="w-full">
+          <FloorPlanGrid />
         </section>
 
         {/* Section 04: The Locale */}
