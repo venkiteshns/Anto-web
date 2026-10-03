@@ -52,23 +52,23 @@ export default function FloorPlanGrid() {
   }, [activePhoto, handleKeyDown]);
 
   return (
-    <section className="w-full bg-estate-bg pt-10 sm:pt-14 md:pt-18 pb-16 sm:pb-24 border-t border-[#E6E3DC]/60">
+    <section className="w-full bg-estate-bg pt-8 sm:pt-10 md:pt-14 pb-12 sm:pb-16 border-t border-[#E6E3DC]/60">
       <div className="w-full max-w-[1366px] mx-auto px-6 md:px-12 lg:px-[46px]">
         {/* Editorial Section Header */}
-        <div className="text-center max-w-[720px] mx-auto mb-8 md:mb-12">
-          <p className="text-[#A99362] text-[11px] md:text-[12px] uppercase font-sans tracking-[0.24em] font-medium mb-2.5 select-none">
+        <div className="text-center max-w-[640px] mx-auto mb-6 md:mb-9">
+          <p className="text-[#A99362] text-[10.5px] md:text-[11px] uppercase font-sans tracking-[0.24em] font-medium mb-2 select-none">
             ARCHITECTURAL SCHEMATICS
           </p>
-          <h2 className="text-estate-primary font-serif font-light text-[32px] sm:text-[40px] md:text-[48px] leading-tight tracking-tight select-none">
+          <h2 className="text-estate-primary font-serif font-light text-[28px] sm:text-[34px] md:text-[38px] leading-tight tracking-tight select-none">
             Villa Layouts & Floor Plans
           </h2>
-          <p className="mt-3 text-estate-secondary font-sans font-light text-[14px] sm:text-[15px] md:text-[16px] leading-relaxed">
+          <p className="mt-2 text-estate-secondary font-sans font-light text-[13.5px] sm:text-[14.5px] leading-relaxed">
             Connected G+3 French Renaissance row villas designed with symmetry, private elevators, and open-air sundecks.
           </p>
         </div>
 
-        {/* Single Unified 3-Photo Grid Container (1 on Top, 2 on Bottom) */}
-        <div className="w-full bg-white rounded-2xl md:rounded-3xl border border-[#E6E3DC] shadow-[0_8px_30px_rgba(0,0,0,0.04)] overflow-hidden">
+        {/* Compact Unified 3-Photo Grid Container (1 on Top, 2 on Bottom) */}
+        <div className="w-full max-w-[760px] lg:max-w-[800px] mx-auto bg-white rounded-2xl md:rounded-3xl border border-[#E6E3DC] shadow-[0_8px_30px_rgba(0,0,0,0.04)] overflow-hidden">
           {/* Row 1: Top Image (Full Width) */}
           <div
             onClick={() => setActivePhoto(GRID_PHOTOS.top)}
