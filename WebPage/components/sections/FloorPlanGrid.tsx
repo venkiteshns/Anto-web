@@ -25,7 +25,7 @@ const GRID_PHOTOS = {
 
 export default function FloorPlanGrid({ onOpenPlanModal }: FloorPlanGridProps) {
   return (
-    <section className="w-full bg-estate-bg pt-6 sm:pt-8 md:pt-10 pb-10 sm:pb-14 border-t border-[#E6E3DC]/60">
+    <section className="w-full bg-estate-bg pt-4 sm:pt-6 md:pt-8 pb-8 sm:pb-10 md:pb-12 border-t border-[#E6E3DC]/60">
       <div className="w-full max-w-[1366px] mx-auto px-6 md:px-12 lg:px-[46px]">
         {/* Editorial Section Header */}
         <div className="text-center max-w-[580px] mx-auto mb-5 md:mb-7">
@@ -37,51 +37,51 @@ export default function FloorPlanGrid({ onOpenPlanModal }: FloorPlanGridProps) {
           </h2>
         </div>
 
-        {/* Compact Seamless 3-Photo Grid Container (Blurred with Centered 'View Floor Plan' Button) */}
+        {/* Horizontal Rectangle 3-Photo Grid Container (Subtle Blur with Centered 'View Floor Plan' Button) */}
         <div
           onClick={onOpenPlanModal}
-          className="group relative w-full max-w-[620px] sm:max-w-[660px] md:max-w-[680px] mx-auto bg-[#E6E3DC] rounded-xl sm:rounded-2xl border border-[#E6E3DC] shadow-[0_8px_30px_rgba(0,0,0,0.06)] overflow-hidden cursor-pointer"
+          className="group relative w-full max-w-[880px] lg:max-w-[960px] xl:max-w-[1020px] mx-auto bg-[#E6E3DC] rounded-xl sm:rounded-2xl border border-[#E6E3DC] shadow-[0_8px_30px_rgba(0,0,0,0.06)] overflow-hidden cursor-pointer"
         >
-          {/* Blurred Background Grid Images */}
-          <div className="filter blur-[4px] scale-[1.02] transition-all duration-500 group-hover:blur-[5px] group-hover:scale-[1.03] select-none pointer-events-none">
-            {/* Row 1: Top Image (Full Width, Flush) */}
-            <div className="relative w-full aspect-[16/9] sm:aspect-[16/8.8] bg-white overflow-hidden">
+          {/* Background Grid Images with Reduced Soft Blur */}
+          <div className="filter blur-[1.5px] scale-[1.01] transition-all duration-500 group-hover:blur-[2px] select-none pointer-events-none">
+            {/* Row 1: Top Image (Full Width, Sleek Reduced Height) */}
+            <div className="relative w-full h-[160px] sm:h-[195px] md:h-[225px] bg-white overflow-hidden">
               <Image
                 src={GRID_PHOTOS.top.src}
                 alt={GRID_PHOTOS.top.alt}
                 fill
-                sizes="(max-width: 768px) 100vw, 680px"
-                className="object-cover object-center"
+                sizes="(max-width: 1024px) 100vw, 1020px"
+                className="object-cover object-[center_35%]"
                 priority
               />
             </div>
 
-            {/* Row 2: Bottom 2 Images (Side by Side with tight 1px gap) */}
-            <div className="grid grid-cols-2 gap-[1px] mt-[1px] bg-[#E6E3DC]">
-              <div className="relative w-full aspect-[16/11] bg-white overflow-hidden">
+            {/* Row 2: Bottom 2 Images (Side by Side with tight 1px gap, Sleek Reduced Height) */}
+            <div className="grid grid-cols-2 gap-[1px] mt-[1px] bg-[#E6E3DC] h-[120px] sm:h-[150px] md:h-[175px]">
+              <div className="relative w-full h-full bg-white overflow-hidden">
                 <Image
                   src={GRID_PHOTOS.bottomLeft.src}
                   alt={GRID_PHOTOS.bottomLeft.alt}
                   fill
-                  sizes="(max-width: 768px) 50vw, 340px"
-                  className="object-cover object-center"
+                  sizes="(max-width: 1024px) 50vw, 510px"
+                  className="object-cover object-[center_28%]"
                 />
               </div>
 
-              <div className="relative w-full aspect-[16/11] bg-white overflow-hidden">
+              <div className="relative w-full h-full bg-white overflow-hidden">
                 <Image
                   src={GRID_PHOTOS.bottomRight.src}
                   alt={GRID_PHOTOS.bottomRight.alt}
                   fill
-                  sizes="(max-width: 768px) 50vw, 340px"
-                  className="object-cover object-center"
+                  sizes="(max-width: 1024px) 50vw, 510px"
+                  className="object-cover object-[center_28%]"
                 />
               </div>
             </div>
           </div>
 
           {/* Centered Overlay with 'View Floor Plan' Button */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/20 backdrop-blur-[2px] p-4 transition-colors duration-300 group-hover:bg-black/25">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/15 group-hover:bg-black/20 p-4 transition-colors duration-300">
             <button
               type="button"
               onClick={(e) => {

@@ -16,10 +16,10 @@ import ConfigurationsModal from "@/components/ui/ConfigurationsModal";
 
 export default function EstatePageClient() {
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState<"visit" | "brochure">("visit");
+  const [modalMode, setModalMode] = useState<"visit" | "brochure" | "floorplan">("visit");
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
 
-  const handleOpenModal = (mode: "visit" | "brochure" = "visit") => {
+  const handleOpenModal = (mode: "visit" | "brochure" | "floorplan" = "visit") => {
     setModalMode(mode);
     setIsBookModalOpen(true);
   };
@@ -53,7 +53,7 @@ export default function EstatePageClient() {
 
         {/* Section: Floor Plan Grid Showcase (1 on top, 2 on bottom) */}
         <section id="floor-plans" className="w-full">
-          <FloorPlanGrid onOpenPlanModal={() => handleOpenModal("brochure")} />
+          <FloorPlanGrid onOpenPlanModal={() => handleOpenModal("floorplan")} />
         </section>
 
         {/* Section 04: The Locale */}

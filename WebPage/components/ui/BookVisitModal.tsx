@@ -14,7 +14,7 @@ import {
 interface BookVisitModalProps {
   isOpen: boolean;
   onClose: () => void;
-  mode?: "visit" | "brochure";
+  mode?: "visit" | "brochure" | "floorplan";
 }
 
 const MONTH_NAMES = [
@@ -44,6 +44,8 @@ export default function BookVisitModal({
   mode = "visit",
 }: BookVisitModalProps) {
   const isBrochure = mode === "brochure";
+  const isFloorPlan = mode === "floorplan";
+  const isGatedDownload = isBrochure || isFloorPlan;
   const configOptions = useMemo(
     () =>
       CONFIGURATION_OPTIONS.slice(1).filter(
@@ -328,7 +330,7 @@ export default function BookVisitModal({
     const isValid = validateAll();
     if (!isValid) return;
 
-    if (!isBrochure && !date) {
+    if (!isGatedDownload && !date) {
       toggleDatePicker();
       return;
     }
@@ -339,11 +341,15 @@ export default function BookVisitModal({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          formType: isBrochure ? "Download Brochure" : "Book A Visit",
+          formType: isFloorPlan
+            ? "Get Floor Plan"
+            : isBrochure
+            ? "Download Brochure"
+            : "Book A Visit",
           name: name.trim(),
           phone: fullPhoneNumber,
           email: email.trim(),
-          date: isBrochure ? undefined : date,
+          date: isGatedDownload ? undefined : date,
           config,
         }),
       });
@@ -433,13 +439,23 @@ export default function BookVisitModal({
           <>
             <div className="mb-6">
               <p className="text-[#A99362] text-[11px] uppercase tracking-[0.24em] font-medium font-sans mb-1">
-                {isBrochure ? "EXCLUSIVE PORTFOLIO" : "PRIVATE EXPERIENCE"}
+                {isFloorPlan
+                  ? "ARCHITECTURAL SCHEMATICS"
+                  : isBrochure
+                  ? "EXCLUSIVE PORTFOLIO"
+                  : "PRIVATE EXPERIENCE"}
               </p>
               <h3 className="text-2xl md:text-3xl font-serif text-[#171B21] font-light">
-                {isBrochure ? "Download Brochure" : "Schedule A Visit"}
+                {isFloorPlan
+                  ? "Get Floor Plan"
+                  : isBrochure
+                  ? "Download Brochure"
+                  : "Schedule A Visit"}
               </h3>
               <p className="text-xs text-[#73716C] font-sans mt-2">
-                {isBrochure
+                {isFloorPlan
+                  ? "Receive the comprehensive Godrej Florenne architectural schematics, floor plans, and layout specifications."
+                  : isBrochure
                   ? "Receive the comprehensive Godrej Florenne floor plans, specifications, and estate brochure."
                   : "Experience the 20-acre French Renaissance row-villa enclave in Whitefield, Bengaluru."}
               </p>
@@ -541,8 +557,8 @@ export default function BookVisitModal({
                 </div>
               </div>
 
-              <div className={isBrochure ? "space-y-4" : "grid grid-cols-1 sm:grid-cols-2 gap-4"}>
-                {!isBrochure && (
+              <div className={isGatedDownload ? "space-y-4" : "grid grid-cols-1 sm:grid-cols-2 gap-4"}>
+                {!isGatedDownload && (
                   <div className="relative" ref={datePickerRef}>
                     <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1">
                       Preferred Date
@@ -712,7 +728,7 @@ export default function BookVisitModal({
 
                 <div className="relative" ref={dropdownRef}>
                   <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1">
-                    {isBrochure ? "Preferred Typology / Villa Size" : "Configuration"}
+                    {isGatedDownload ? "Preferred Typology / Villa Size" : "Configuration"}
                   </label>
                   <button
                     type="button"
@@ -813,6 +829,23 @@ export default function BookVisitModal({
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                       </svg>
                       <span>Transmitting Request...</span>
+                    </>
+                  ) : isFloorPlan ? (
+                    <>
+                      <span>Get Floor Plan</span>
+                      <svg
+                        className="w-4 h-4 ml-1.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.75}
+                          d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12V3m0 9l3.5-3.5M12 12l-3.5-3.5"
+                        />
+                      </svg>
                     </>
                   ) : isBrochure ? (
                     <>
