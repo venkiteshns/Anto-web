@@ -64,6 +64,40 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "RealEstateListing",
+  name: "Godrej Florenne",
+  description:
+    "Twenty acres of connected G+3 French Renaissance row villas with blue slate mansard roofs and cream limestone façades in Whitefield, Bengaluru by Godrej Properties.",
+  url: "https://godrejflorenne-whitefield.com",
+  image: "https://godrejflorenne-whitefield.com/images/hero-villa.jpg",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Soukya Road, Whitefield",
+    addressLocality: "Bengaluru",
+    addressRegion: "Karnataka",
+    postalCode: "560067",
+    addressCountry: "IN",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 12.9698,
+    longitude: 77.7499,
+  },
+  brand: {
+    "@type": "Organization",
+    name: "Godrej Properties Limited",
+    url: "https://www.godrejproperties.com",
+  },
+  offers: {
+    "@type": "AggregateOffer",
+    priceCurrency: "INR",
+    availability: "https://schema.org/InStock",
+    category: "Luxury 4 & 5 BHK French Renaissance Row Villas",
+  },
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -73,6 +107,10 @@ export default function RootLayout({
     <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
       <head>
         <link rel="canonical" href="https://godrejflorenne-whitefield.com" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body className="bg-estate-bg text-estate-primary antialiased selection:bg-estate-primary selection:text-estate-bg">
         {children}
