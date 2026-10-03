@@ -36,6 +36,19 @@ export async function forwardToGoogleSheets(lead: LeadData): Promise<boolean> {
       return false;
     }
 
+    const text = await res.text();
+    let result: { status?: string; message?: string } | null = null;
+    try {
+      result = JSON.parse(text);
+    } catch {
+      // response might be plain text or HTML redirect
+    }
+
+    if (result && result.status === "error") {
+      console.error(`[Google Sheets] Webhook returned error from Apps Script: ${result.message}`);
+      return false;
+    }
+
     console.log("[Google Sheets] Lead successfully forwarded to Google Sheet.");
     return true;
   } catch (error) {

@@ -368,9 +368,8 @@ export default function BookVisitModal({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-md overflow-hidden touch-none overscroll-contain ${
-        isClosing ? "animate-backdrop-out pointer-events-none" : "animate-backdrop-in"
-      }`}
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-md overflow-hidden touch-none overscroll-contain ${isClosing ? "animate-backdrop-out pointer-events-none" : "animate-backdrop-in"
+        }`}
       onClick={handleBackdropClick}
       onWheel={(e) => {
         if (e.target === e.currentTarget) {
@@ -381,9 +380,8 @@ export default function BookVisitModal({
       <div
         ref={modalRef}
         onClick={(e) => e.stopPropagation()}
-        className={`relative w-full max-w-lg bg-[#FAF8F5] border border-[#E6E3DC] shadow-2xl p-6 sm:p-8 md:p-10 rounded-2xl my-auto transform-gpu ${
-          isClosing ? "animate-genie-out" : "animate-genie-in"
-        }`}
+        className={`relative w-full max-w-lg bg-[#FAF8F5] border border-[#E6E3DC] shadow-2xl p-6 sm:p-8 md:p-10 rounded-2xl my-auto transform-gpu ${isClosing ? "animate-genie-out" : "animate-genie-in"
+          }`}
       >
         {/* Close Button */}
         <button
@@ -464,11 +462,10 @@ export default function BookVisitModal({
                   }}
                   placeholder="Lord / Lady / Mr. / Ms."
                   aria-invalid={Boolean(touched.name && errors.name)}
-                  className={`w-full h-[42px] bg-white border rounded-lg px-4 text-sm text-[#171B21] focus:outline-none transition-colors ${
-                    touched.name && errors.name
-                      ? "border-red-400 bg-red-50/10 focus:border-red-500 focus:ring-1 focus:ring-red-400/40"
-                      : "border-[#E6E3DC] focus:border-[#A99362]"
-                  }`}
+                  className={`w-full h-[42px] bg-white border rounded-lg px-4 text-sm text-[#171B21] focus:outline-none transition-colors ${touched.name && errors.name
+                    ? "border-red-400 bg-red-50/10 focus:border-red-500 focus:ring-1 focus:ring-red-400/40"
+                    : "border-[#E6E3DC] focus:border-[#A99362]"
+                    }`}
                 />
                 {touched.name && errors.name && (
                   <p className="mt-1 text-xs text-red-500 font-sans flex items-center space-x-1 animate-fadeIn">
@@ -524,11 +521,10 @@ export default function BookVisitModal({
                     }}
                     placeholder="vikram@domain.com"
                     aria-invalid={Boolean(touched.email && errors.email)}
-                    className={`w-full h-[42px] bg-white border rounded-lg px-4 text-sm text-[#171B21] focus:outline-none transition-colors font-sans ${
-                      touched.email && errors.email
-                        ? "border-red-400 bg-red-50/10 focus:border-red-500 focus:ring-1 focus:ring-red-400/40"
-                        : "border-[#E6E3DC] focus:border-[#A99362]"
-                    }`}
+                    className={`w-full h-[42px] bg-white border rounded-lg px-4 text-sm text-[#171B21] focus:outline-none transition-colors font-sans ${touched.email && errors.email
+                      ? "border-red-400 bg-red-50/10 focus:border-red-500 focus:ring-1 focus:ring-red-400/40"
+                      : "border-[#E6E3DC] focus:border-[#A99362]"
+                      }`}
                   />
                   {touched.email && errors.email && (
                     <p className="mt-1 text-xs text-red-500 font-sans flex items-center space-x-1 animate-fadeIn">
@@ -551,175 +547,170 @@ export default function BookVisitModal({
                     <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1">
                       Preferred Date
                     </label>
-                  <button
-                    type="button"
-                    onClick={toggleDatePicker}
-                    aria-haspopup="dialog"
-                    aria-expanded={isDatePickerOpen}
-                    className={`w-full h-[42px] bg-white border rounded-lg px-3 text-xs font-sans flex items-center justify-between text-left transition-all duration-200 focus:outline-none cursor-pointer ${
-                      isDatePickerOpen
+                    <button
+                      type="button"
+                      onClick={toggleDatePicker}
+                      aria-haspopup="dialog"
+                      aria-expanded={isDatePickerOpen}
+                      className={`w-full h-[42px] bg-white border rounded-lg px-3 text-xs font-sans flex items-center justify-between text-left transition-all duration-200 focus:outline-none cursor-pointer ${isDatePickerOpen
                         ? "border-[#A99362] ring-1 ring-[#A99362]/30 shadow-sm"
                         : "border-[#E6E3DC] hover:border-[#C8C3B8]"
-                    }`}
-                  >
-                    <span className={date ? "text-[#171B21] font-medium" : "text-[#73716C]/60"}>
-                      {date ? formatDisplayDate(date) : "dd-mm-yyyy"}
-                    </span>
-                    <svg
-                      className={`w-4 h-4 transition-colors shrink-0 ${
-                        isDatePickerOpen ? "text-[#A99362]" : "text-[#A99362]/80"
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                        }`}
                     >
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth={1.7} />
-                      <line x1="16" y1="2" x2="16" y2="6" strokeWidth={1.7} strokeLinecap="round" />
-                      <line x1="8" y1="2" x2="8" y2="6" strokeWidth={1.7} strokeLinecap="round" />
-                      <line x1="3" y1="10" x2="21" y2="10" strokeWidth={1.7} />
-                    </svg>
-                  </button>
+                      <span className={date ? "text-[#171B21] font-medium" : "text-[#73716C]/60"}>
+                        {date ? formatDisplayDate(date) : "dd-mm-yyyy"}
+                      </span>
+                      <svg
+                        className={`w-4 h-4 transition-colors shrink-0 ${isDatePickerOpen ? "text-[#A99362]" : "text-[#A99362]/80"
+                          }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth={1.7} />
+                        <line x1="16" y1="2" x2="16" y2="6" strokeWidth={1.7} strokeLinecap="round" />
+                        <line x1="8" y1="2" x2="8" y2="6" strokeWidth={1.7} strokeLinecap="round" />
+                        <line x1="3" y1="10" x2="21" y2="10" strokeWidth={1.7} />
+                      </svg>
+                    </button>
 
-                  {/* Hidden input for HTML5 form validation */}
-                  <input
-                    type="text"
-                    required
-                    value={date}
-                    onChange={() => {}}
-                    className="sr-only"
-                    tabIndex={-1}
-                    aria-hidden="true"
-                  />
+                    {/* Hidden input for HTML5 form validation */}
+                    <input
+                      type="text"
+                      required
+                      value={date}
+                      onChange={() => { }}
+                      className="sr-only"
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
 
-                  {/* Custom Themed Date Picker Popover */}
-                  {isDatePickerOpen && (
-                    <div
-                      role="dialog"
-                      aria-label="Select Date"
-                      className={`absolute left-0 z-40 w-72 max-w-[calc(100vw-3rem)] bg-white border border-[#E6E3DC] rounded-xl shadow-2xl shadow-black/15 p-3 select-none animate-fadeIn ${
-                        openUpwards ? "bottom-full mb-2" : "top-full mt-1.5"
-                      }`}
-                    >
-                      {/* Month / Year header */}
-                      <div className="flex items-center justify-between mb-2 px-1">
-                        <span className="font-serif text-[15px] font-medium text-[#171B21] tracking-wide">
-                          {MONTH_NAMES[viewMonth]} {viewYear}
-                        </span>
-                        <div className="flex items-center space-x-1">
-                          <button
-                            type="button"
-                            onClick={handlePrevMonth}
-                            disabled={isCurrentMonthOrPast}
-                            className={`p-1.5 rounded-full text-[#73716C] transition-colors ${
-                              isCurrentMonthOrPast
+                    {/* Custom Themed Date Picker Popover */}
+                    {isDatePickerOpen && (
+                      <div
+                        role="dialog"
+                        aria-label="Select Date"
+                        className={`absolute left-0 z-40 w-72 max-w-[calc(100vw-3rem)] bg-white border border-[#E6E3DC] rounded-xl shadow-2xl shadow-black/15 p-3 select-none animate-fadeIn ${openUpwards ? "bottom-full mb-2" : "top-full mt-1.5"
+                          }`}
+                      >
+                        {/* Month / Year header */}
+                        <div className="flex items-center justify-between mb-2 px-1">
+                          <span className="font-serif text-[15px] font-medium text-[#171B21] tracking-wide">
+                            {MONTH_NAMES[viewMonth]} {viewYear}
+                          </span>
+                          <div className="flex items-center space-x-1">
+                            <button
+                              type="button"
+                              onClick={handlePrevMonth}
+                              disabled={isCurrentMonthOrPast}
+                              className={`p-1.5 rounded-full text-[#73716C] transition-colors ${isCurrentMonthOrPast
                                 ? "opacity-25 cursor-not-allowed"
                                 : "hover:bg-[#FAF8F5] hover:text-[#171B21]"
-                            }`}
-                            aria-label="Previous month"
+                                }`}
+                              aria-label="Previous month"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 19l-7-7 7-7" />
+                              </svg>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleNextMonth}
+                              className="p-1.5 rounded-full text-[#73716C] hover:bg-[#FAF8F5] hover:text-[#171B21] transition-colors"
+                              aria-label="Next month"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 5l7 7-7 7" />
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Weekday headers */}
+                        <div className="grid grid-cols-7 gap-1 text-center mb-1">
+                          {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+                            <span
+                              key={day}
+                              className="text-[10px] uppercase tracking-wider font-semibold text-[#A99362] py-0.5"
+                            >
+                              {day}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Days Grid */}
+                        <div className="grid grid-cols-7 gap-1 text-center">
+                          {Array.from({ length: firstDayOfWeek }).map((_, i) => (
+                            <span key={`empty-${i}`} className="h-7 w-7" />
+                          ))}
+
+                          {Array.from({ length: daysInMonth }).map((_, i) => {
+                            const dayNum = i + 1;
+                            const dateStr = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(dayNum).padStart(2, "0")}`;
+                            const isSelected = date === dateStr;
+                            const cellDate = new Date(viewYear, viewMonth, dayNum);
+                            cellDate.setHours(0, 0, 0, 0);
+                            const isPast = cellDate < todayDate;
+                            const isToday = cellDate.getTime() === todayDate.getTime();
+
+                            return (
+                              <button
+                                key={dayNum}
+                                type="button"
+                                disabled={isPast}
+                                onClick={() => {
+                                  setDate(dateStr);
+                                  setIsDatePickerOpen(false);
+                                }}
+                                className={`h-7 w-7 mx-auto flex items-center justify-center rounded-full text-xs font-sans transition-all ${isSelected
+                                  ? "bg-[#171B21] text-white font-medium shadow-sm"
+                                  : isPast
+                                    ? "text-[#73716C]/30 cursor-not-allowed"
+                                    : isToday
+                                      ? "border border-[#A99362] text-[#A99362] font-semibold hover:bg-[#FAF8F5]"
+                                      : "text-[#171B21] hover:bg-[#F5F2EB]"
+                                  }`}
+                              >
+                                {dayNum}
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        {/* Footer actions: Clear & Today */}
+                        <div className="flex items-center justify-between pt-2.5 mt-2 border-t border-[#E6E3DC] px-1">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDate("");
+                              setIsDatePickerOpen(false);
+                            }}
+                            className="text-[11px] text-[#73716C] hover:text-[#171B21] transition-colors"
                           >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 19l-7-7 7-7" />
-                            </svg>
+                            Clear
                           </button>
                           <button
                             type="button"
-                            onClick={handleNextMonth}
-                            className="p-1.5 rounded-full text-[#73716C] hover:bg-[#FAF8F5] hover:text-[#171B21] transition-colors"
-                            aria-label="Next month"
+                            onClick={() => {
+                              const y = todayDate.getFullYear();
+                              const m = String(todayDate.getMonth() + 1).padStart(2, "0");
+                              const d = String(todayDate.getDate()).padStart(2, "0");
+                              setDate(`${y}-${m}-${d}`);
+                              setViewYear(todayDate.getFullYear());
+                              setViewMonth(todayDate.getMonth());
+                              setIsDatePickerOpen(false);
+                            }}
+                            className="text-[11px] text-[#A99362] font-medium hover:underline transition-colors"
                           >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 5l7 7-7 7" />
-                            </svg>
+                            Today
                           </button>
                         </div>
                       </div>
+                    )}
+                  </div>
+                )}
 
-                      {/* Weekday headers */}
-                      <div className="grid grid-cols-7 gap-1 text-center mb-1">
-                        {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-                          <span
-                            key={day}
-                            className="text-[10px] uppercase tracking-wider font-semibold text-[#A99362] py-0.5"
-                          >
-                            {day}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Days Grid */}
-                      <div className="grid grid-cols-7 gap-1 text-center">
-                        {Array.from({ length: firstDayOfWeek }).map((_, i) => (
-                          <span key={`empty-${i}`} className="h-7 w-7" />
-                        ))}
-
-                        {Array.from({ length: daysInMonth }).map((_, i) => {
-                          const dayNum = i + 1;
-                          const dateStr = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(dayNum).padStart(2, "0")}`;
-                          const isSelected = date === dateStr;
-                          const cellDate = new Date(viewYear, viewMonth, dayNum);
-                          cellDate.setHours(0, 0, 0, 0);
-                          const isPast = cellDate < todayDate;
-                          const isToday = cellDate.getTime() === todayDate.getTime();
-
-                          return (
-                            <button
-                              key={dayNum}
-                              type="button"
-                              disabled={isPast}
-                              onClick={() => {
-                                setDate(dateStr);
-                                setIsDatePickerOpen(false);
-                              }}
-                              className={`h-7 w-7 mx-auto flex items-center justify-center rounded-full text-xs font-sans transition-all ${
-                                isSelected
-                                  ? "bg-[#171B21] text-white font-medium shadow-sm"
-                                  : isPast
-                                  ? "text-[#73716C]/30 cursor-not-allowed"
-                                  : isToday
-                                  ? "border border-[#A99362] text-[#A99362] font-semibold hover:bg-[#FAF8F5]"
-                                  : "text-[#171B21] hover:bg-[#F5F2EB]"
-                              }`}
-                            >
-                              {dayNum}
-                            </button>
-                          );
-                        })}
-                      </div>
-
-                      {/* Footer actions: Clear & Today */}
-                      <div className="flex items-center justify-between pt-2.5 mt-2 border-t border-[#E6E3DC] px-1">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setDate("");
-                            setIsDatePickerOpen(false);
-                          }}
-                          className="text-[11px] text-[#73716C] hover:text-[#171B21] transition-colors"
-                        >
-                          Clear
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const y = todayDate.getFullYear();
-                            const m = String(todayDate.getMonth() + 1).padStart(2, "0");
-                            const d = String(todayDate.getDate()).padStart(2, "0");
-                            setDate(`${y}-${m}-${d}`);
-                            setViewYear(todayDate.getFullYear());
-                            setViewMonth(todayDate.getMonth());
-                            setIsDatePickerOpen(false);
-                          }}
-                          className="text-[11px] text-[#A99362] font-medium hover:underline transition-colors"
-                        >
-                          Today
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <div className="relative" ref={dropdownRef}>
+                <div className="relative" ref={dropdownRef}>
                   <label className="block text-[11px] uppercase tracking-wider text-[#73716C] font-sans mb-1">
                     {isBrochure ? "Preferred Typology / Villa Size" : "Configuration"}
                   </label>
@@ -731,17 +722,15 @@ export default function BookVisitModal({
                     }}
                     aria-haspopup="listbox"
                     aria-expanded={isDropdownOpen}
-                    className={`w-full h-[42px] bg-white border rounded-lg px-3 text-xs text-[#171B21] font-sans flex items-center justify-between text-left transition-all duration-200 focus:outline-none ${
-                      isDropdownOpen
-                        ? "border-[#A99362] ring-1 ring-[#A99362]/30 shadow-sm"
-                        : "border-[#E6E3DC] hover:border-[#C8C3B8]"
-                    }`}
+                    className={`w-full h-[42px] bg-white border rounded-lg px-3 text-xs text-[#171B21] font-sans flex items-center justify-between text-left transition-all duration-200 focus:outline-none ${isDropdownOpen
+                      ? "border-[#A99362] ring-1 ring-[#A99362]/30 shadow-sm"
+                      : "border-[#E6E3DC] hover:border-[#C8C3B8]"
+                      }`}
                   >
                     <span className="truncate">{config}</span>
                     <svg
-                      className={`w-3.5 h-3.5 text-[#A99362] transition-transform duration-200 ml-2 shrink-0 ${
-                        isDropdownOpen ? "rotate-180" : ""
-                      }`}
+                      className={`w-3.5 h-3.5 text-[#A99362] transition-transform duration-200 ml-2 shrink-0 ${isDropdownOpen ? "rotate-180" : ""
+                        }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -774,19 +763,17 @@ export default function BookVisitModal({
                               setConfig(opt);
                               setIsDropdownOpen(false);
                             }}
-                            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-sans transition-all flex items-center justify-between group ${
-                              isSelected
-                                ? "bg-[#F5F2EB] text-[#171B21] font-medium"
-                                : "text-[#171B21]/80 hover:bg-[#FAF8F5] hover:text-[#171B21]"
-                            }`}
+                            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-sans transition-all flex items-center justify-between group ${isSelected
+                              ? "bg-[#F5F2EB] text-[#171B21] font-medium"
+                              : "text-[#171B21]/80 hover:bg-[#FAF8F5] hover:text-[#171B21]"
+                              }`}
                           >
                             <span className="flex items-center gap-2">
                               <span
-                                className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                                  isSelected
-                                    ? "bg-[#A99362]"
-                                    : "bg-transparent group-hover:bg-[#A99362]/40"
-                                }`}
+                                className={`w-1.5 h-1.5 rounded-full transition-colors ${isSelected
+                                  ? "bg-[#A99362]"
+                                  : "bg-transparent group-hover:bg-[#A99362]/40"
+                                  }`}
                               />
                               {opt}
                             </span>
@@ -829,7 +816,7 @@ export default function BookVisitModal({
                     </>
                   ) : isBrochure ? (
                     <>
-                      <span>Download Official Brochure</span>
+                      <span>Get Brochure</span>
                       <svg
                         className="w-4 h-4 ml-1.5"
                         fill="none"

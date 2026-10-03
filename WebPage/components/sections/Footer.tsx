@@ -148,7 +148,7 @@ export default function Footer({ onOpenBookVisit }: FooterProps) {
             {/* Column 3: Contact */}
             <div className="flex flex-col">
               <span className="text-[10px] md:text-[11px] uppercase tracking-[0.24em] font-medium text-white/45 font-sans mb-4 select-none">
-                CONTACT
+                ADDRESS
               </span>
               <div className="space-y-2.5 text-[13px] font-sans font-light text-white/75">
                 <p className="leading-snug">
@@ -157,32 +157,6 @@ export default function Footer({ onOpenBookVisit }: FooterProps) {
                   Whitefield
                   <br />
                   Bengaluru, Karnataka
-                </p>
-                <p>
-                  <a
-                    href="tel:+918792899027"
-                    className="hover:text-white transition-colors"
-                  >
-                    +91 87928 99027
-                  </a>
-                </p>
-                <p>
-                  <a
-                    href="https://wa.me/918867855125"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-white transition-colors"
-                  >
-                    WhatsApp +91 88678 55125
-                  </a>
-                </p>
-                <p>
-                  <a
-                    href="mailto:nfsestates.web@gmail.com"
-                    className="hover:text-[#A99362] transition-colors underline underline-offset-4"
-                  >
-                    nfsestates.web@gmail.com
-                  </a>
                 </p>
               </div>
             </div>
@@ -201,7 +175,7 @@ export default function Footer({ onOpenBookVisit }: FooterProps) {
 
           {/* Right */}
           <div className="text-left md:text-right space-y-1">
-            <p className="text-white/60">© 2026 Authorized Channel Partner.</p>
+            {/* <p className="text-white/60">© 2026 Authorized Channel Partner.</p> */}
             <p className="text-white/40">
               Phase 1: PRM/KA/RERA/1250/304/PR/150926/008942 &nbsp;·&nbsp; Phase 2: PRM/KA/RERA/1250/304/PR/150926/008943
             </p>
