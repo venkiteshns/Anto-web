@@ -53,7 +53,7 @@ export default function EstatePageClient() {
 
         {/* Section: Floor Plan Grid Showcase (1 on top, 2 on bottom) */}
         <section id="floor-plans" className="w-full">
-          <FloorPlanGrid />
+          <FloorPlanGrid onOpenPlanModal={() => handleOpenModal("brochure")} />
         </section>
 
         {/* Section 04: The Locale */}
